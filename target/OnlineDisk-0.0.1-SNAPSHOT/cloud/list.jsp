@@ -196,21 +196,46 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						   }
 						   function downName(originalName, path, name){
 							   layer.load(2);
-							   $.ajax({
-									type:"POST",
-									url:"${pageContext.request.contextPath}/downloadFile.do",
-									data:{ originalName:originalName, path:path, name:name },
-									dataType:"json",
-									async: false,
-									success:function(res){
-										layer.closeAll('loading');
-										if (res.errres) {
-											window.open('${pageContext.request.contextPath}/' + res.url);
-									    }else{
-											layer.msg(res.errmsg, 2, -1);
-									    }
-									}
-							   });
+							   var form=$("<form>");//定义⼀个form表单
+							   form.attr("style","display:none");
+							   form.attr("target","_blank");
+							   form.attr("method","post");
+							   form.attr("action","${pageContext.request.contextPath}/downloadFiletoBrower.do");
+							   var input1=$("<input>");
+							   input1.attr("type","hidden");
+							   input1.attr("name","originalName");
+							   input1.attr("value",(originalName));
+							   var input2=$("<input>");
+							   input2.attr("type","hidden");
+							   input2.attr("name","path");
+							   input2.attr("value",(path));
+							   var input3=$("<input>");
+							   input3.attr("type","hidden");
+							   input3.attr("name","name");
+							   input3.attr("value",(name));
+							   form.append(input1);
+							   form.append(input2);
+							   form.append(input3);
+							   $("body").append(form);//将表单放置在web中
+							   form.submit();//表单提交
+
+
+
+							   <%--/*  $.ajax({--%>
+							   <%--	type:"POST",--%>
+							   <%--	url:"${pageContext.request.contextPath}/downloadFiletoBrower.do",--%>
+							   <%--	data:{ originalName:originalName, path:path, name:name },--%>
+							   <%--	dataType:"json",--%>
+							   <%--	async: false,--%>
+							   <%--	success:function(res){--%>
+							   <%--		layer.closeAll('loading');--%>
+							   <%--		if (res.errres) {--%>
+							   <%--			window.open('${pageContext.request.contextPath}/' + res.url);--%>
+							   <%--	    }else{--%>
+							   <%--			layer.msg(res.errmsg, 2, -1);--%>
+							   <%--	    }--%>
+							   <%--	}--%>
+							   <%--  });*/--%>
 						   }
 						   function share(){
 							   var ids = [];
